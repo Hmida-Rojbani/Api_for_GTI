@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Base64;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
@@ -117,20 +118,26 @@ public class BLogic {
 
 	@GetMapping("/q5/")
 	public Map<Boolean, List<Person>> adultsPersons() {
-
-		return null;
+		return ((Collection<PersonEntity>) personRepository.findAll()).stream()
+														   .map(pe -> mapper.map(pe, Person.class))
+														   .collect(Collectors.partitioningBy(p->p.getAge()>18));
 	}
 
 	@GetMapping("/q6/")
 	public Map<Integer, List<Person>> personsByYearOfBirth() {
 
-		return null;
+		return ((Collection<PersonEntity>) personRepository.findAll()).stream()
+				   .map(pe -> mapper.map(pe, Person.class))
+				   .collect(Collectors.groupingBy(p-> p.getDateOfBirth().getYear()));
 	}
 
 	@GetMapping("/q7/")
 	public Map<String, List<Person>> personsByNickName() {
 
-		return null;
+		return ((Collection<PersonEntity>) personRepository.findAll()).stream()
+				   .map(pe -> mapper.map(pe, Person.class))
+				   .sorted(Comparator.comparing(Person::getName).thenComparing(p->p.getAge()))
+				   .collect(Collectors.groupingBy(p-> p.getNickName()!=null?p.getNickName():"missing"));
 	}
 
 }
