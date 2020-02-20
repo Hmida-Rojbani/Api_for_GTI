@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Base64;
 import java.util.Collection;
-import java.util.Comparator;
+import static java.util.Comparator.*;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
@@ -80,7 +80,6 @@ public class BLogic {
 
 	@GetMapping("/q2/age/{age}")
 	public long personsCountByAge(@PathVariable("age") int age) {
-
 		return ((Collection<PersonEntity>) personRepository.findAll()).stream().mapToInt(pe -> pe.getAge())
 				.filter(a -> a == age).count();
 
@@ -136,7 +135,7 @@ public class BLogic {
 
 		return ((Collection<PersonEntity>) personRepository.findAll()).stream()
 				   .map(pe -> mapper.map(pe, Person.class))
-				   .sorted(Comparator.comparing(Person::getName).thenComparing(p->p.getAge()))
+				   .sorted(comparing(Person::getName).thenComparing(p->p.getAge()))
 				   .collect(Collectors.groupingBy(p-> p.getNickName()!=null?p.getNickName():"missing"));
 	}
 
