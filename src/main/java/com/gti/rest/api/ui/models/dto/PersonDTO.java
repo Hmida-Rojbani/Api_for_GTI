@@ -16,6 +16,8 @@ public class PersonDTO {
 	private String name;
 	@Past(message = "Date of birth must be in the past.")
 	private LocalDate dateOfBirth;
+	
+	private AddressDTO address;
 
 	public void setDateOfBirth(String date) {
 		this.dateOfBirth = DateTools.convertDate(date);
@@ -24,5 +26,7 @@ public class PersonDTO {
 	public void setDateOfBirth(LocalDate date) {
 		this.dateOfBirth = date;
 	}
+	
+	
 
 }
