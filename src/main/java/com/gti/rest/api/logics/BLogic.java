@@ -1,6 +1,8 @@
 package com.gti.rest.api.logics;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Base64;
 import java.util.Collection;
 import java.util.List;
@@ -9,6 +11,9 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -67,29 +72,65 @@ public class BLogic {
 	@GetMapping("/q1")
 	public double personsAverageAges() {
 
-		 return ((Collection<PersonEntity>) personRepository.findAll()).stream()
-		 														.mapToInt(pe -> pe.getAge())
-		 														.average().orElse(0);
-		
-	}
-	
-	@GetMapping("/q2/age/{age}")
-	public int personsCountByAge(int age) {
+		return ((Collection<PersonEntity>) personRepository.findAll()).stream().mapToInt(pe -> pe.getAge()).average()
+				.orElse(0);
 
-		return 0;
 	}
-	
+
+	@GetMapping("/q2/age/{age}")
+	public long personsCountByAge(@PathVariable("age") int age) {
+
+		return ((Collection<PersonEntity>) personRepository.findAll()).stream().mapToInt(pe -> pe.getAge())
+				.filter(a -> a == age).count();
+
+	}
+
 	@GetMapping("/q3/")
 	public List<Person> personsBornInThisDay() {
+		DateTimeFormatter pattern = DateTimeFormatter.ofPattern("ddMM");
+
+		String thisDay = LocalDate.now().format(pattern);
+
+		return ((Collection<PersonEntity>) personRepository.findAll()).stream()
+				.filter(pe -> pe.getDateOfBirth().format(pattern).equals(thisDay))
+				.map(pe -> mapper.map(pe, Person.class))
+				.collect(Collectors.toList());
+
+	}
+
+	@GetMapping("/q4/month/{month}")
+	public List<Person> personsBornInSpecificMonth(@PathVariable("month") int month) {
+		DateTimeFormatter pattern = DateTimeFormatter.ofPattern("MM");
+
+		if (!(month <= 12 && month >= 1))
+			throw new IllegalArgumentException("month must be between 1 and 12");
+		return ((Collection<PersonEntity>) personRepository.findAll()).stream()
+				.filter(pe -> Integer.parseInt(pe.getDateOfBirth().format(pattern)) == month)
+				.map(pe -> mapper.map(pe, Person.class)).collect(Collectors.toList());
+
+	}
+
+	@ExceptionHandler(IllegalArgumentException.class)
+	public ResponseEntity<Object> handleIllegalArg(IllegalArgumentException e) {
+		return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+	}
+
+	@GetMapping("/q5/")
+	public Map<Boolean, List<Person>> adultsPersons() {
 
 		return null;
 	}
-	
-	@GetMapping("/q4/")
-	public List<Person> personsBornInSpecificMonth(int age) {
+
+	@GetMapping("/q6/")
+	public Map<Integer, List<Person>> personsByYearOfBirth() {
 
 		return null;
 	}
-	
+
+	@GetMapping("/q7/")
+	public Map<String, List<Person>> personsByNickName() {
+
+		return null;
+	}
 
 }

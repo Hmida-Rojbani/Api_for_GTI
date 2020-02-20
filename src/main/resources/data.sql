@@ -7,6 +7,6 @@ insert into person_entity (id, address_id, date_of_birth, person_name) values (n
 
 insert into person_entity (id, address_id, date_of_birth, person_name, person_nickname) values (null, 1, '1999-01-04', 'person3', 'per3');
 
-insert into person_entity (id, address_id, date_of_birth, person_name) values (null, 3, '1999-01-04', 'person4');
+insert into person_entity (id, address_id, date_of_birth, person_name) values (null, 3, '1999-02-20', 'person4');
 insert into person_entity (id, address_id, date_of_birth, person_name, person_nickname) values (null, 3, '2000-01-04', 'person5', 'per5');
-insert into person_entity (id, address_id, date_of_birth, person_name) values (null, 3, '2002-01-04', 'person6');
+insert into person_entity (id, address_id, date_of_birth, person_name) values (null, 3, '2002-02-20', 'person6');
