@@ -43,9 +43,7 @@ public class BLogic {
 	}
 	@GetMapping("/test/{age}")
 	public Map<String, List<Person>> personsOverAge(@PathVariable("age")int age) {
-
 		return personsOverWhat(p->p.getAge()>age);
-
 	}
 	
 	@GetMapping("/test/read/{txt}")
@@ -64,10 +62,8 @@ public class BLogic {
 	
 	@PostMapping("/test/read")
 	public String readAndDencode64(@RequestBody String fileName) {
-
-		
+	
 			return new String(Base64.getDecoder().decode(fileName));
-
 
 	}
 	
