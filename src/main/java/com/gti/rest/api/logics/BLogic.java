@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
 import com.gti.rest.api.db.entities.PersonEntity;
 import com.gti.rest.api.db.repos.PersonRepository;
 import com.gti.rest.api.models.Person;
@@ -35,36 +34,61 @@ public class BLogic {
 
 	public Map<String, List<Person>> personsOverWhat(Predicate<Person> whatCondition) {
 
-		return ((Collection<PersonEntity>) personRepository.findAll()).stream()
-				.map(pe -> mapper.map(pe, Person.class))
-				.filter(whatCondition)
-				.collect(Collectors.groupingBy(p -> p.getAddress().getName()));
+		return ((Collection<PersonEntity>) personRepository.findAll()).stream().map(pe -> mapper.map(pe, Person.class))
+				.filter(whatCondition).collect(Collectors.groupingBy(p -> p.getAddress().getName()));
 
 	}
+
 	@GetMapping("/test/{age}")
-	public Map<String, List<Person>> personsOverAge(@PathVariable("age")int age) {
-		return personsOverWhat(p->p.getAge()>age);
+	public Map<String, List<Person>> personsOverAge(@PathVariable("age") int age) {
+		return personsOverWhat(p -> p.getAge() > age);
 	}
-	
+
 	@GetMapping("/test/read/{txt}")
-	public byte[] readAndEncode64(@PathVariable("txt")String fileName) {
+	public byte[] readAndEncode64(@PathVariable("txt") String fileName) {
 
 		try {
-			return Base64.getEncoder().encode(fileTools.readSource(fileName).getBytes()) ;
+			return Base64.getEncoder().encode(fileTools.readSource(fileName).getBytes());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		return null;
 
 	}
-	
+
 	@PostMapping("/test/read")
 	public String readAndDencode64(@RequestBody String fileName) {
-	
-			return new String(Base64.getDecoder().decode(fileName));
+		return new String(Base64.getDecoder().decode(fileName));
 
+	}
+
+	@GetMapping("/q1")
+	public double personsAverageAges() {
+
+		 return ((Collection<PersonEntity>) personRepository.findAll()).stream()
+		 														.mapToInt(pe -> pe.getAge())
+		 														.average().orElse(0);
+		
+	}
+	
+	@GetMapping("/q2/age/{age}")
+	public int personsCountByAge(int age) {
+
+		return 0;
+	}
+	
+	@GetMapping("/q3/")
+	public List<Person> personsBornInThisDay() {
+
+		return null;
+	}
+	
+	@GetMapping("/q4/")
+	public List<Person> personsBornInSpecificMonth(int age) {
+
+		return null;
 	}
 	
 
