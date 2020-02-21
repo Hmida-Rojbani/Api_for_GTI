@@ -16,7 +16,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.convention.MatchingStrategies;
 
 import com.gti.rest.api.db.entities.PersonEntity;
 import com.gti.rest.api.db.repos.PersonRepository;
@@ -30,24 +29,24 @@ class PersonServiceImplTest {
 	@Mock
 	PersonRepository personRepository;
 	
+	@Mock
 	ModelMapper modelMapper;
 	Optional<PersonEntity> resultDB, resultDBEmpty;
 	PersonEntity personEntity;
 	PersonDTO personDTO;
 	@BeforeEach
 	void setUp() throws Exception {
-		modelMapper = new ModelMapper(); 
-		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 		personEntity = new PersonEntity(1L, "GTI",LocalDate.of(2000,1,1),"gti");
 		personDTO = new PersonDTO("GTI", LocalDate.of(2000,1,1));
 		resultDB = Optional.of(personEntity);
 		resultDBEmpty = Optional.empty();
 		MockitoAnnotations.initMocks(this);
-		personService.setModelMapper(modelMapper);
 	}
 
 	@Test
 	void testGetPerson() {
+		
+		when(modelMapper.map(any(), any())).thenReturn(personDTO);
 		
 		when(personRepository.findById(anyLong())).thenReturn(resultDB);
 		
@@ -59,6 +58,8 @@ class PersonServiceImplTest {
 	
 	@Test
 	void testGetPersonNotFound() {
+		
+		when(modelMapper.map(any(), any())).thenReturn(personDTO);
 		
 		when(personRepository.findById(anyLong())).thenReturn(resultDBEmpty);
 		
