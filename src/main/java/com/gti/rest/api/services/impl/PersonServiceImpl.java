@@ -13,9 +13,11 @@ import com.gti.rest.api.services.PersonService;
 import com.gti.rest.api.ui.models.dto.PersonDTO;
 
 import lombok.AllArgsConstructor;
+import lombok.Setter;
 
 @Service
 @AllArgsConstructor
+@Setter
 public class PersonServiceImpl implements PersonService {
 	
 	private ModelMapper modelMapper;

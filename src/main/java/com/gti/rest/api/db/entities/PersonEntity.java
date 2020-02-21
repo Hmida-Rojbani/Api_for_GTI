@@ -10,13 +10,16 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
-
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 
 @Entity
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @ToString(exclude = "address")
 public class PersonEntity {
 	
@@ -35,6 +38,17 @@ public class PersonEntity {
 		 return Period.between(dateOfBirth,now).getYears();
 	}
 	
+	
+
+	public PersonEntity(Long id, String name, LocalDate dateOfBirth, String nickName) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.dateOfBirth = dateOfBirth;
+		this.nickName = nickName;
+	}
+
+
 
 	@ManyToOne
 	private AddressEntity address;
